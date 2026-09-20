@@ -44,19 +44,6 @@ class TopicBroadcastBlock(BlockDefinition):
 
     kind = "topic_broadcast"
 
-    def ui_assets(self, surface: str = "modal") -> list[dict[str, str]]:
-        """Return the block-owned JavaScript for modal and inspector surfaces.
-
-        Args:
-            surface: UI surface requesting assets.
-        """
-
-        if surface == "modal":
-            return [{"kind": "js", "path": "assets/js/block_modal.js"}]
-        if surface == "inspector_panel":
-            return [{"kind": "js", "path": "assets/js/inspector_panel.js"}]
-        return []
-
     def render_node_card(self, *, node: dict[str, Any], payload: dict[str, Any] | None = None) -> dict[str, Any]:
         """Render the topic and fixed one-input/one-output role on the canvas card."""
 
