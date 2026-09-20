@@ -5,12 +5,12 @@
       <h2 id="{{ node_id }}BlockModalTitle">{{ node_title }}</h2>
     </div>
     <div class="modal-actions">
-      <button class="ghost-btn" data-close-block-modal type="button">Fermer</button>
+      <button class="ghost-btn" data-close-block-modal type="button">Close</button>
     </div>
   </div>
   <div class="block-config-modal-body">
     <section class="ports-editor-section">
-      <div class="ports-editor-header"><span class="group-label">Identité</span></div>
+      <div class="ports-editor-header"><span class="group-label">Identity</span></div>
       {{ title_field_html }}
     </section>
     <section class="ports-editor-section">
@@ -19,14 +19,14 @@
         <label>Topic Runtime</label>
         <input data-topic-broadcast-topic data-block-config-field="topic" type="text" maxlength="128" autocomplete="off" value="{{ topic }}" />
       </div>
-      <p class="inspector-copy">En Active Runtime, l'entrée publie d'abord sur ce topic. Le bloc reçoit ensuite cette publication et la recopie sur sa sortie.</p>
+      <p class="inspector-copy">In Active Runtime, the input publishes on this topic first. The block then receives that publication and copies it to its output.</p>
     </section>
     <section class="ports-editor-section">
       <div class="ports-editor-header"><span class="group-label">Ports</span></div>
       {{ ports_html }}
     </section>
     <section class="ports-editor-section">
-      <div class="ports-editor-header"><span class="group-label">Dernier état</span></div>
+      <div class="ports-editor-header"><span class="group-label">Last state</span></div>
       {{ runtime_html }}
     </section>
   </div>

@@ -56,7 +56,7 @@ class TopicBroadcastBlock(BlockDefinition):
             replacements={
                 "title": node.get("title") or self.default_title(),
                 "topic": topic or "topic non configuré",
-                "flow": "1 entrée · 1 sortie",
+                "flow": "1 input · 1 output",
             },
         )
 
@@ -72,7 +72,7 @@ class TopicBroadcastBlock(BlockDefinition):
             replacements={
                 "topic": escape(topic, quote=True),
                 "description": escape(
-                    "Publie l'entrée sur ce topic et réplique chaque événement reçu vers la sortie."
+                    "Publishes the input on this topic and replicates every received event to the output."
                 ),
             },
         )
@@ -154,7 +154,7 @@ class TopicBroadcastBlock(BlockDefinition):
             return BlockRuntimeResult(
                 status="skipped",
                 outputs=[],
-                logs=[f"[topic-broadcast] {context.node_id}: aucun événement à traiter."],
+                logs=[f"[topic-broadcast] {context.node_id}: no event to process."],
                 last_message="",
                 content_type=TEXT_PLAIN,
                 worker_received="-",
@@ -191,7 +191,7 @@ class TopicBroadcastBlock(BlockDefinition):
             return self._failure(context, str(exc))
 
         last_event = context.input_events[-1]
-        summary = f"{len(message_ids)} événement(s) publié(s) sur {topic}"
+        summary = f"{len(message_ids)} event(s) published on {topic}"
         return BlockRuntimeResult(
             status="success",
             outputs=[],
@@ -220,7 +220,7 @@ class TopicBroadcastBlock(BlockDefinition):
         value = self._serialize_payload(event.payload)
         content_type = str(event.content_type or TEXT_PLAIN)
         outputs = self._broadcast_outputs(context, value=value, content_type=content_type)
-        summary = f"événement {event.message_id} reçu de {event.source_node_id} sur {topic}"
+        summary = f"event {event.message_id} received from {event.source_node_id} on {topic}"
         return BlockRuntimeResult(
             status="success",
             outputs=outputs,

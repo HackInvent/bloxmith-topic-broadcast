@@ -154,21 +154,21 @@ def test_preparation_model_and_ui() -> None:
     active = block.prepare_runtime(direct_context(runtime_mode="zeromq_active"))
     expect(len(active.topic_bindings) == 1, "Le bloc actif doit déclarer exactement un topic.")
     binding = active.topic_bindings[0]
-    expect(binding.topic == "orders.created", "Le topic configuré doit être déclaré tel quel.")
-    expect(binding.publish and binding.subscribe, "Le bloc doit publier et s'abonner au topic.")
-    expect(binding.receive_own, "Le bloc doit recevoir ses propres publications avant d'émettre sur sa sortie.")
-    expect(active.keep_alive, "Le subscriber doit rester actif jusqu'au Stop.")
+    expect(binding.topic == "orders.created", "The configured topic must be declared as is.")
+    expect(binding.publish and binding.subscribe, "The block must publish on and subscribe to the topic.")
+    expect(binding.receive_own, "The block must receive its own publications before emitting on its output.")
+    expect(active.keep_alive, "The subscriber must stay active until Stop.")
 
     centralized = block.prepare_runtime(direct_context(runtime_mode="centralized"))
-    expect(centralized.topic_bindings == (), "La simulation ne doit pas déclarer le transport topic.")
-    expect(not centralized.keep_alive, "La simulation centralisée ne doit pas rester vivante.")
+    expect(centralized.topic_bindings == (), "The simulation must not declare the topic transport.")
+    expect(not centralized.keep_alive, "The centralized simulation must not stay alive.")
 
     try:
         block.prepare_runtime(direct_context(runtime_mode="centralized", topic="topic invalide"))
     except ValueError:
         pass
     else:
-        raise AssertionError("Un nom de topic invalide doit être refusé dans les deux modes.")
+        raise AssertionError("An invalid topic name must be refused in both modes.")
 
     required_context = direct_context(runtime_mode="centralized")
     required_context.input_ports = (
@@ -182,17 +182,17 @@ def test_preparation_model_and_ui() -> None:
     try:
         block.prepare_runtime(required_context)
     except ValueError as exc:
-        expect("blocking_input" in str(exc), "L'erreur doit identifier l'entrée requise incompatible.")
+        expect("blocking_input" in str(exc), "The error must identify the incompatible required input.")
     else:
-        raise AssertionError("Une entrée requise doit être refusée avant l'exécution du bloc.")
+        raise AssertionError("A required input must be refused before the block runs.")
 
     capabilities = block.model.get("port_capabilities", {})
-    expect(capabilities.get("can_add_inputs") is False, "Le bloc ne doit pas accepter d'entrée supplémentaire.")
-    expect(capabilities.get("can_add_outputs") is False, "Le bloc ne doit pas accepter de sortie supplémentaire.")
-    expect(capabilities.get("allow_required_input") is False, "Les entrées requises doivent rester interdites.")
-    expect(capabilities.get("default_required") is False, "Les nouvelles entrées doivent être optionnelles.")
-    expect(len(block.model.get("ports", {}).get("inputs", [])) == 1, "Le modèle doit déclarer une seule entrée.")
-    expect(len(block.model.get("ports", {}).get("outputs", [])) == 1, "Le modèle doit déclarer une seule sortie.")
+    expect(capabilities.get("can_add_inputs") is False, "The block must not accept an extra input.")
+    expect(capabilities.get("can_add_outputs") is False, "The block must not accept an extra output.")
+    expect(capabilities.get("allow_required_input") is False, "Required inputs must stay forbidden.")
+    expect(capabilities.get("default_required") is False, "New inputs must be optional.")
+    expect(len(block.model.get("ports", {}).get("inputs", [])) == 1, "The model must declare a single input.")
+    expect(len(block.model.get("ports", {}).get("outputs", [])) == 1, "The model must declare a single output.")
 
     extra_output_context = direct_context(runtime_mode="centralized")
     extra_output_context.output_ports = (
@@ -202,9 +202,9 @@ def test_preparation_model_and_ui() -> None:
     try:
         block.prepare_runtime(extra_output_context)
     except ValueError as exc:
-        expect("exactly one input and one output" in str(exc), "L'erreur doit expliquer le contrat de ports fixe.")
+        expect("exactly one input and one output" in str(exc), "The error must explain the fixed port contract.")
     else:
-        raise AssertionError("Une sortie supplémentaire doit être refusée avant l'exécution.")
+        raise AssertionError("An extra output must be refused before execution.")
 
     node = topic_broadcast_node("topic-ui")
     modal_html = str(render_block_modal("topic_broadcast", {"node": node, "runtime": {}}).get("html") or "")
@@ -230,16 +230,16 @@ def test_direct_active_publication_and_topic_relay() -> None:
             services={"runtime_topics": client},
         )
     )
-    expect(published.status == "success", "La publication directe doit réussir.")
-    expect(published.outputs == [], "Une entrée active doit publier sur le topic, pas directement sur le graphe.")
+    expect(published.status == "success", "The direct publication must succeed.")
+    expect(published.outputs == [], "An active input must publish on the topic, not straight to the graph.")
     expect(
         [(item["payload"], item["content_type"]) for item in client.publications]
         == [("first", "text/plain"), ('{"count":2}', "application/json")],
-        "Chaque événement d'entrée doit être publié sans transformation.",
+        "Every input event must be published without transformation.",
     )
     expect(
         published.metadata.get("topic_broadcast", {}).get("event_count") == 2,
-        "Le nombre de publications doit être tracé.",
+        "The number of publications must be logged.",
     )
 
     relayed = block.execute_runtime(
@@ -258,10 +258,10 @@ def test_direct_active_publication_and_topic_relay() -> None:
             ),
         )
     )
-    expect(relayed.status == "success", "La réception directe doit réussir.")
-    expect(len(relayed.outputs) == 1, "Le message reçu doit être émis sur l'unique sortie.")
-    expect({output.value for output in relayed.outputs} == {'{"order_id":42}'}, "Le payload JSON doit être sérialisé.")
-    expect({output.content_type for output in relayed.outputs} == {"application/json"}, "Le content type doit être préservé.")
+    expect(relayed.status == "success", "The direct reception must succeed.")
+    expect(len(relayed.outputs) == 1, "The received message must be emitted on the single output.")
+    expect({output.value for output in relayed.outputs} == {'{"order_id":42}'}, "The JSON payload must be serialized.")
+    expect({output.content_type for output in relayed.outputs} == {"application/json"}, "The content type must be preserved.")
 
 
 def test_centralized_runtime() -> None:
@@ -282,10 +282,10 @@ def test_centralized_runtime() -> None:
         )
         created = create_run_api(server, document, runtime_mode="centralized")
         run = wait_for_run_terminal(server, str(created.get("run_id") or ""), timeout_sec=20)
-        expect(run.get("status") == "success", "Le run Topic Broadcast centralisé doit réussir.")
+        expect(run.get("status") == "success", "The centralized Topic Broadcast run must succeed.")
         expect(
             run.get("output_values", {}).get("topic-central:1", {}).get("value") == "central message",
-            "La première sortie centralisée doit recevoir la valeur.",
+            "The first centralized output must receive the value.",
         )
 
 
@@ -327,18 +327,18 @@ def test_active_runtime_topic_broadcast() -> None:
             "Les deux Topic Broadcast et leurs Displays n'ont pas tous traité la publication Runtime Topics.",
             timeout_sec=20,
         )
-        expect(state.get("status") == "running", "Les subscribers keep-alive doivent conserver le run actif.")
+        expect(state.get("status") == "running", "Keep-alive subscribers must keep the run active.")
         expect(
             state.get("results", {}).get("display-publisher", {}).get("display_received_count") == 1,
-            "Le Display local doit recevoir l'auto-publication par la sortie du publisher.",
+            "The local Display must receive the self-publication through the publisher output.",
         )
         expect(
             state.get("results", {}).get("display-subscriber", {}).get("display_received_count") == 1,
-            "Le Display distant doit recevoir la publication par la sortie du subscriber.",
+            "The remote Display must receive the publication through the subscriber output.",
         )
         stop_run_api(server, run_id)
         stopped = wait_for_run_terminal(server, run_id, timeout_sec=20)
-        expect(stopped.get("status") in {"cancelled", "success"}, "Stop doit terminer le runtime topic actif.")
+        expect(stopped.get("status") in {"cancelled", "success"}, "Stop must end the active topic runtime.")
 
 
 def main() -> None:

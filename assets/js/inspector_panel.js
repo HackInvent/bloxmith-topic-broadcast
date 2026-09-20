@@ -13,7 +13,7 @@
 function lockRequiredInputChoices(root) {
   root.querySelectorAll('.port-requirement-input[value="required_for_execution"]').forEach((input) => {
     input.disabled = true;
-    input.closest("label")?.setAttribute("title", "Les entrées Topic Broadcast restent toujours optionnelles.");
+    input.closest("label")?.setAttribute("title", "Topic Broadcast inputs always stay optional.");
   });
 }
 
