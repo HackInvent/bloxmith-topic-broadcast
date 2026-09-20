@@ -55,7 +55,7 @@ class TopicBroadcastBlock(BlockDefinition):
             node_classes=["topic-broadcast-node"],
             replacements={
                 "title": node.get("title") or self.default_title(),
-                "topic": topic or "topic non configuré",
+                "topic": topic or "topic not configured",
                 "flow": "1 input · 1 output",
             },
         )
@@ -247,7 +247,7 @@ class TopicBroadcastBlock(BlockDefinition):
         value = str(event.value if event.value is not None else "")
         content_type = str(event.content_type or TEXT_PLAIN)
         outputs = self._broadcast_outputs(context, value=value, content_type=content_type)
-        summary = f"relais local vers {len(outputs)} sortie(s) pour le topic {topic}"
+        summary = f"local relay to {len(outputs)} output(s) for the topic {topic}"
         return BlockRuntimeResult(
             status="success",
             outputs=outputs,

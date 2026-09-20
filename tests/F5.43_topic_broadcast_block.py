@@ -152,7 +152,7 @@ def test_preparation_model_and_ui() -> None:
 
     block = TopicBroadcastBlock()
     active = block.prepare_runtime(direct_context(runtime_mode="zeromq_active"))
-    expect(len(active.topic_bindings) == 1, "Le bloc actif doit déclarer exactement un topic.")
+    expect(len(active.topic_bindings) == 1, "The active block must declare exactly one topic.")
     binding = active.topic_bindings[0]
     expect(binding.topic == "orders.created", "The configured topic must be declared as is.")
     expect(binding.publish and binding.subscribe, "The block must publish on and subscribe to the topic.")
@@ -210,9 +210,9 @@ def test_preparation_model_and_ui() -> None:
     modal_html = str(render_block_modal("topic_broadcast", {"node": node, "runtime": {}}).get("html") or "")
     inspector_html = str(render_block_inspector_panel("topic_broadcast", {"node": node}).get("html") or "")
     card_html = str(render_block_node_card("topic_broadcast", {"node": node}).get("html") or "")
-    expect('data-block-config-field="topic"' in modal_html, "Le modal doit éditer le topic.")
-    expect('data-block-config-field="topic"' in inspector_html, "L'inspector doit éditer le topic.")
-    expect("orders.created" in card_html, "La node-card doit afficher le topic configuré.")
+    expect('data-block-config-field="topic"' in modal_html, "The modal must edit the topic.")
+    expect('data-block-config-field="topic"' in inspector_html, "The inspector must edit the topic.")
+    expect("orders.created" in card_html, "The node card must show the configured topic.")
 
 
 def test_direct_active_publication_and_topic_relay() -> None:
@@ -324,7 +324,7 @@ def test_active_runtime_topic_broadcast() -> None:
                 and item.get("results", {}).get("display-subscriber", {}).get("display_received_count")
                 == 1
             ),
-            "Les deux Topic Broadcast et leurs Displays n'ont pas tous traité la publication Runtime Topics.",
+            "Not every Topic Broadcast and its Display processed the Runtime Topics publication.",
             timeout_sec=20,
         )
         expect(state.get("status") == "running", "Keep-alive subscribers must keep the run active.")
