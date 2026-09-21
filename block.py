@@ -56,7 +56,7 @@ class TopicBroadcastBlock(BlockDefinition):
             replacements={
                 "title": node.get("title") or self.default_title(),
                 "topic": topic or "topic not configured",
-                "flow": "1 input · 1 output",
+                "flow": self.translate("block.topic_broadcast.flow", fallback="1 input · 1 output"),
             },
         )
 
@@ -71,9 +71,10 @@ class TopicBroadcastBlock(BlockDefinition):
             payload=payload,
             replacements={
                 "topic": escape(topic, quote=True),
-                "description": escape(
-                    "Publishes the input on this topic and replicates every received event to the output."
-                ),
+                "description": escape(self.translate(
+                    "block.topic_broadcast.description",
+                    fallback="Publishes the input on this topic and replicates every received event to the output.",
+                )),
             },
         )
         return {
