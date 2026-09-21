@@ -1,0 +1,10 @@
+{
+  "block.topic_broadcast.model.title": "Diffusion de topic",
+  "block.topic_broadcast.pill": "Topic",
+  "block.topic_broadcast.flow": "1 entrée · 1 sortie",
+  "block.topic_broadcast.section_label": "Diffusion",
+  "block.topic_broadcast.topic_label": "Topic runtime",
+  "block.topic_broadcast.modal_hint": "En Active Runtime, l'entrée publie d'abord sur ce topic. Le bloc reçoit ensuite cette publication et la recopie sur sa sortie.",
+  "block.topic_broadcast.description": "Publie l'entrée sur ce topic et réplique chaque événement reçu vers la sortie.",
+  "block.topic_broadcast.inspector_hint": "L'entrée publie d'abord sur le topic. La sortie est émise après réception du topic, y compris pour la publication du bloc lui-même."
+}

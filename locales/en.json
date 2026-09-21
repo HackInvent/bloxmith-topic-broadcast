@@ -1,0 +1,10 @@
+{
+  "block.topic_broadcast.model.title": "Topic Broadcast",
+  "block.topic_broadcast.pill": "Topic",
+  "block.topic_broadcast.flow": "1 input · 1 output",
+  "block.topic_broadcast.section_label": "Broadcast",
+  "block.topic_broadcast.topic_label": "Runtime topic",
+  "block.topic_broadcast.modal_hint": "In Active Runtime, the input publishes on this topic first. The block then receives that publication and copies it to its output.",
+  "block.topic_broadcast.description": "Publishes the input on this topic and replicates every received event to the output.",
+  "block.topic_broadcast.inspector_hint": "The input publishes on the topic first. The output is emitted after the topic is received, including for this block's own publication."
+}
