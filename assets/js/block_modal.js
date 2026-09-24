@@ -1,3 +1,5 @@
+import { withProperties } from "./properties.js";
+
 // -----------------------------------------------------------------------------
 // Role: Owns Topic Broadcast modal behavior hooks.
 // File Name: block_modal.js
@@ -23,10 +25,15 @@ function lockRequiredInputChoices(root) {
  *
  * @param {HTMLElement} root - Mounted modal root provided by the release loader.
  */
-export function mount(root) {
+function mountOwned(root) {
   if (!(root instanceof HTMLElement)) {
     return;
   }
   root.dataset.topicBroadcastModalReady = "true";
   lockRequiredInputChoices(root);
+}
+
+/** Keep the block behavior and add properties-only accessibility. */
+export function mount(root, ...args) {
+  return withProperties(mountOwned).call(this, root, ...args);
 }

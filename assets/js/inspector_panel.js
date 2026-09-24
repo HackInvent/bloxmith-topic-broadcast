@@ -1,3 +1,5 @@
+import { withProperties } from "./properties.js";
+
 // -----------------------------------------------------------------------------
 // Role: Owns Topic Broadcast inspector surface mounting.
 // File Name: inspector_panel.js
@@ -22,7 +24,12 @@ function lockRequiredInputChoices(root) {
  *
  * @param {HTMLElement} root - Mounted Topic Broadcast inspector root.
  */
-export function mount(root) {
+function mountOwned(root) {
   root.dataset.topicBroadcastInspectorReady = "true";
   lockRequiredInputChoices(root);
+}
+
+/** Keep the block behavior and add properties-only accessibility. */
+export function mount(root, ...args) {
+  return withProperties(mountOwned).call(this, root, ...args);
 }
