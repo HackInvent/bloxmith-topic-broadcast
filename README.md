@@ -10,9 +10,6 @@ Verified BloxSmith versions: **1.0.9** (bundled-block tests; see [test evidence]
 
 [![TOPIC — Publishes and subscribes to a named runtime topic through one graph input and one graph output.](media/thumbnail.webp)](media/cover.png)
 
-*Concept illustration. [Artwork and generation prompt](media/README.md).*
-
-
 ## Role
 
 `topic_broadcast` is a single-input/single-output bridge for named, run-scoped Runtime Topics. Use several instances configured with the same topic when data must cross graph branches without a direct edge between the publisher and every subscriber.
